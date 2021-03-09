@@ -135,7 +135,7 @@ function include_template($name, array $data = []) {
     }
 
     ob_start();
-    extract($data);
+    extract($data, EXTR_OVERWRITE);
     require $name;
 
     $result = ob_get_clean();
@@ -143,4 +143,13 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
+/**
+ * форматирование цены
+ * @param int $price Цена введённая пользователем
+ * @return string Отформатированная цена
+ */
+function format_price($price) {
+    $price_format = number_format($price, 0, '.', ' ');
 
+    return "$price_format".' ₽';
+}
