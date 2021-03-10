@@ -148,8 +148,60 @@ function include_template($name, array $data = []) {
  * @param int $price Цена введённая пользователем
  * @return string Отформатированная цена
  */
-function format_price($price) {
+function format_price($price)
+{
     $price_format = number_format($price, 0, '.', ' ');
 
-    return "$price_format".' ₽';
+    return $price_format . ' ₽';
 }
+
+/**
+ * Расчитывает интервал времени в формате дат
+ * @param  string $date_end Дата окончания
+ * @return string
+ */
+function timer($date_end)
+{
+    if (is_date_valid($date_end)) {
+        $now = date_create("now");
+        $date_end_object = date_create($date_end);
+        $interval = date_diff($now, $date_end_object);
+
+    }
+        return $interval->format('%M:%d:%h:%i');
+
+}
+
+/**
+ * Таймер аукциона
+ * @param string $date_end Дата окончания
+ * @return array Остаток часов и минут, и булево true если осталось менее часа
+ */
+function get_dt_range($date_end)
+{
+    if (is_date_valid($date_end)) {
+        $date_end_unit = strtotime($date_end);
+        $now = time();
+        if ($date_end_unit > $now) {
+            $interval = $date_end_unit - $now;
+            $hors = intdiv($interval, 3600);
+            $min = intdiv(($interval % 3600), 60);
+            if ($hors < 1) {
+                $bool = true;
+            } else {
+                $bool = false;
+            }
+            if ($hors < 10) {
+                $hors = '0' . $hors;
+            }
+            if ($min < 10) {
+                $min = '0' . $min;
+            }
+        } else {
+            $hors = '00';
+            $min = '00';
+        }
+    }
+    return [$hors.' : '.$min, $bool];
+}
+
