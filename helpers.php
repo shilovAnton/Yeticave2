@@ -126,7 +126,8 @@ function get_noun_plural_form (int $number, string $one, string $two, string $ma
  * @param array $data Ассоциативный массив с данными для шаблона
  * @return string Итоговый HTML
  */
-function include_template($name, array $data = []) {
+function include_template($name, array $data = []): string
+{
     $name = 'templates/' . $name;
     $result = '';
 
@@ -148,7 +149,7 @@ function include_template($name, array $data = []) {
  * @param int $price Цена введённая пользователем
  * @return string Отформатированная цена
  */
-function format_price($price)
+function format_price($price): string
 {
     $price_format = number_format($price, 0, '.', ' ');
 
@@ -156,28 +157,11 @@ function format_price($price)
 }
 
 /**
- * Расчитывает интервал времени в формате дат
- * @param  string $date_end Дата окончания
- * @return string
- */
-function timer($date_end)
-{
-    if (is_date_valid($date_end)) {
-        $now = date_create("now");
-        $date_end_object = date_create($date_end);
-        $interval = date_diff($now, $date_end_object);
-
-    }
-        return $interval->format('%M:%d:%h:%i');
-
-}
-
-/**
- * Таймер аукциона
+ * Таймер аукциона, рассчитывает остаток времени до окончания торгов в формате: Часы:Минуты
  * @param string $date_end Дата окончания
  * @return array Остаток часов и минут, и булево true если осталось менее часа
  */
-function get_dt_range($date_end)
+function get_dt_range($date_end): array
 {
     if (is_date_valid($date_end)) {
         $date_end_unit = strtotime($date_end);
