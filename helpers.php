@@ -50,7 +50,7 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
             else if (is_string($value)) {
                 $type = 's';
             }
-            else if (is_double($value)) {
+            else if (is_float($value)) {
                 $type = 'd';
             }
 
@@ -145,7 +145,7 @@ function include_template($name, array $data = []): string
 }
 
 /**
- * форматирование цены
+ * форматирует цену, добавляет пробел и знак '₽'
  * @param int $price Цена введённая пользователем
  * @return string Отформатированная цена
  */
@@ -171,9 +171,9 @@ function get_dt_range($date_end): array
             $hors = intdiv($interval, 3600);
             $min = intdiv(($interval % 3600), 60);
             if ($hors < 1) {
-                $bool = true;
+                $timer_finishing = true;
             } else {
-                $bool = false;
+                $timer_finishing = false;
             }
             if ($hors < 10) {
                 $hors = '0' . $hors;
@@ -184,8 +184,9 @@ function get_dt_range($date_end): array
         } else {
             $hors = '00';
             $min = '00';
+            $timer_finishing = true;
         }
     }
-    return [$hors.' : '.$min, $bool];
+    return [$hors.' : '.$min, $timer_finishing];
 }
 
