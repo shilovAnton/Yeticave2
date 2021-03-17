@@ -35,6 +35,38 @@ VALUES
     (3,3,5000),
     (2,2,6000);
 
+-- Получить все категории
 SELECT category_name FROM categories;
+
+-- получение последних открытых лотов
+SELECT date_add, lot_name, initial_rate, img, MAX(rate) as max_rate, category_name
+FROM lots l
+         LEFT JOIN rates r
+                   on l.id = r.lot_id
+         LEFT JOIN categories c on c.id = l.category_id
+WHERE NOW() < date_end
+GROUP BY l.lot_name, l.date_add, l.initial_rate, l.img, c.category_name
+ORDER BY l.date_add DESC
+LIMIT 6;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
