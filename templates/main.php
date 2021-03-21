@@ -6,10 +6,11 @@
         <!--заполните этот список из массива категорий-->
         <?php
         foreach ($categories as $value): ?>
-            <li class="promo__item promo__item--boards">
-                <a class="promo__link" href="pages/all-lots.html"><?= $value; ?></a>
+            <li class="promo__item promo__item--<?= $value['character_code']; ?>">
+                <a class="promo__link" href="pages/all-lots.html"><?= $value['category_name']; ?></a>
             </li>
-        <?php endforeach; ?>
+        <?php
+        endforeach; ?>
     </ul>
 </section>
 <section class="lots">
@@ -22,19 +23,23 @@
         foreach ($goods as $values): ?>
             <li class="lots__item lot">
                 <div class="lot__image">
-                    <img src="<?= $values['картинка']; ?>" width="350" height="260" alt="изображение товара">
+                    <img src="<?= $values['img']; ?>" width="350" height="260" alt="изображение товара">
                 </div>
                 <div class="lot__info">
-                    <span class="lot__category"><?= $values['категория']; ?></span>
-                    <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?= $values['название']; ?></a></h3>
+                    <span class="lot__category"><?= $values['category_name']; ?></span>
+                    <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?= $values['lot_name']; ?></a>
+                    </h3>
                     <div class="lot__state">
                         <div class="lot__rate">
-                            <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?= format_price($values['цена']); ?></span>
+                            <span class="lot__amount"><?= format_price($values['initial_rate']); ?></span>
+                            <span class="lot__cost"><?= format_price(
+                                    $values['max_rate'] ?? $values['initial_rate']
+                                ); ?></span>
                         </div>
                         <div class="lot__timer timer<?php
-                        if (get_dt_range($values['дата истечения'])[1] === true): ?> timer--finishing<?php endif ?>">
-                            <?= get_dt_range($values['дата истечения'])[0]; ?>
+                        if (get_dt_range($values['date_end'])[1] === true): ?> timer--finishing<?php
+                        endif ?>">
+                            <?= get_dt_range($values['date_end'])[0]; ?>
                         </div>
                     </div>
                 </div>

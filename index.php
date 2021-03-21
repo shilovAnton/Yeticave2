@@ -1,63 +1,33 @@
 <?php
 
 require_once('helpers.php');
-//date_default_timezone_set('Asia/Novokuznetsk');
 
 $is_auth = random_int(0, 1);
 
-$categories = [
-    'Доски и лыжи',
-    'Крепления',
-    'Ботинки',
-    'Одежда',
-    'Инструменты',
-    'Разное',
-];
+// Функция которая выполняет соединение с БД, и возвращает объект с параметрами БД
+$link =  mysqli_connect('localhost','mysql','mysql','yeticave');
+if ($link == false){
+    print("Ошибка: Невозможно подключиться к MySQL " . mysqli_connect_error());
+}
+else {
+    //Запрос на получение категорий
+    $inquiry = 'SELECT category_name, character_code FROM categories;';
+    $result = mysqli_query($link, $inquiry);
+    $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-$goods = [
-    [
-        'название' => '2014 Rossignol District Snowboard',
-        'категория' => 'Доски и лыжи',
-        'цена' => 10999,
-        'картинка' => 'img/lot-1.jpg',
-        'дата истечения' => '2021-03-15',
-    ],
-    [
-        'название' => 'DC Ply Mens 2016/2017 Snowboard',
-        'категория' => 'Доски и лыжи',
-        'цена' => 159999,
-        'картинка' => 'img/lot-2.jpg',
-        'дата истечения' => '2021-09-11',
-    ],
-    [
-        'название' => 'Крепления Union Contact Pro 2015 года размер L/XL',
-        'категория' => 'Крепления',
-        'цена' => 8000,
-        'картинка' => 'img/lot-3.jpg',
-        'дата истечения' => '2021-08-12',
-    ],
-    [
-        'название' => 'Ботинки для сноуборда DC Mutiny Charocal',
-        'категория' => 'Ботинки',
-        'цена' => 10999,
-        'картинка' => 'img/lot-4.jpg',
-        'дата истечения' => '2021-07-11',
-    ],
-    [
-        'название' => 'Куртка для сноуборда DC Mutiny Charocal',
-        'категория' => 'Одежда',
-        'цена' => 7500,
-        'картинка' => 'img/lot-5.jpg',
-        'дата истечения' => '2021-06-11',
-    ],
-    [
-        'название' => 'Маска Oakley Canopy',
-        'категория' => 'Разное',
-        'цена' => 5400,
-        'картинка' => 'img/lot-6.jpg',
-        'дата истечения' => '2021-10-09',
-    ],
-];
+    //Запрос на получение последних открытых лотов
+    $inquiry = 'SELECT date_add, date_end, lot_name, initial_rate, img, MAX(rate) as max_rate, category_name
+FROM lots l
+         LEFT JOIN rates r
+                   on l.id = r.lot_id
+         LEFT JOIN categories c on c.id = l.category_id
+WHERE NOW() < date_end
+GROUP BY l.lot_name, l.date_add, l.date_end, l.initial_rate, l.img, c.category_name
+ORDER BY l.date_add DESC
+LIMIT 6;';
+    $result = mysqli_query($link, $inquiry);
+    $goods = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
 
 // Подключение главной страницы
 $main = include_template(
@@ -68,7 +38,7 @@ $main = include_template(
     ]
 );
 
-// Передача переменных, и контента - лейауту
+// Передача переменных, и контента - лейауту;
 $layout = include_template(
     'layout.php',
     [

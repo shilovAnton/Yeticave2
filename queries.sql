@@ -39,34 +39,29 @@ VALUES
 SELECT category_name FROM categories;
 
 -- получение последних открытых лотов
-SELECT date_add, lot_name, initial_rate, img, MAX(rate) as max_rate, category_name
+SELECT date_add, date_end,lot_name, initial_rate, img, MAX(rate) as max_rate, category_name
 FROM lots l
          LEFT JOIN rates r
                    on l.id = r.lot_id
          LEFT JOIN categories c on c.id = l.category_id
 WHERE NOW() < date_end
-GROUP BY l.lot_name, l.date_add, l.initial_rate, l.img, c.category_name
+GROUP BY l.lot_name, l.date_add, l.date_end, l.initial_rate, l.img, c.category_name
 ORDER BY l.date_add DESC
 LIMIT 6;
 
+-- Показать лот по его id. Получить также название категории, к которой принадлежит лот;
+SELECT lot_name, category_name
+FROM lots
+         LEFT JOIN categories c on c.id = lots.category_id
+WHERE lots.id = 6;
 
+-- обновить название лота по его идентификатору;
+UPDATE lots
+SET lot_name = 'Крепления Union Contact Pro 2015 года размер L/XL'
+WHERE id = 3;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-- получить список ставок для лота по его идентификатору с сортировкой по дате.
+SELECT rate
+FROM rates
+WHERE lot_id = 6
+ORDER BY date_rate;
