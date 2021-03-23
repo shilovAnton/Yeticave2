@@ -131,15 +131,16 @@ function include_template($name, array $data = []): string
     $name = 'templates/' . $name;
     $result = '';
 
-    if (!is_readable($name)) {
+    if (!is_readable($name)) { //Сообщает существует ли файл, и доступен ли файл для чтения;
         return $result;
     }
 
-    ob_start();
-    extract($data, EXTR_OVERWRITE);
+    ob_start(); //Включение буферизации вывода
+    extract($data, EXTR_OVERWRITE); // Эта функция рассматривает ключи массива в качестве имён переменных,
+    // а их значения - в качестве значений этих переменных.
     require $name;
 
-    $result = ob_get_clean();
+    $result = ob_get_clean(); //Получить содержимое текущего буфера и удалить его
 
     return $result;
 }

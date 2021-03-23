@@ -3,7 +3,6 @@
     <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и
         горнолыжное снаряжение.</p>
     <ul class="promo__list">
-        <!--заполните этот список из массива категорий-->
         <?php
         foreach ($categories as $value): ?>
             <li class="promo__item promo__item--<?= $value['character_code']; ?>">
@@ -18,7 +17,6 @@
         <h2>Открытые лоты</h2>
     </div>
     <ul class="lots__list">
-        <!--заполните этот список из массива с товарами-->
         <?php
         foreach ($goods as $values): ?>
             <li class="lots__item lot">
@@ -27,7 +25,7 @@
                 </div>
                 <div class="lot__info">
                     <span class="lot__category"><?= $values['category_name']; ?></span>
-                    <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?= $values['lot_name']; ?></a>
+                    <h3 class="lot__title"><a class="text-link" href="lot.php?id=<?= $values['id']; ?>"><?= $values['lot_name']; ?></a>
                     </h3>
                     <div class="lot__state">
                         <div class="lot__rate">
