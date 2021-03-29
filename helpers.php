@@ -191,3 +191,28 @@ function get_dt_range($date_end): array
     return [$hors.' : '.$min, $timer_finishing];
 }
 
+/**
+ * Возвращает удобную, для восприятия, форму даты добавления ставок
+ * @param $date_add string дата добавления ставки
+ * @return string удобочитаемый вид записи
+ * @throws Exception
+ */
+function rates_add($date_add): string
+{
+    $now = new DateTime('now', new DateTimeZone('Asia/Novosibirsk'));
+    $add_object = new DateTime($date_add, new DateTimeZone('Asia/Novosibirsk'));
+    $interval = $now->diff($add_object);
+    if ((($interval->d < 1) and ($interval->h < 1)) and ($interval->m < 1)) {
+        $add = $interval->i . ' ' . get_noun_plural_form($interval->i, 'минуту', 'минуты', 'минут') . ' назад';
+        if ($interval->i < 2) {
+            $add = 'Только что';
+        }
+    } else {
+        if (($interval->m < 1) and ($interval->d < 1) and ($interval->h === 1) and ($interval->i < 2)) {
+            $add = 'Час назад';
+        } else {
+            $add = $add_object->format('d.m.y в H:i');
+        }
+    }
+    return $add;
+}

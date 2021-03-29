@@ -14,7 +14,7 @@ FROM lots l
 WHERE NOW() < date_end
 GROUP BY l.lot_name, l.date_add, l.date_end, l.initial_rate, l.img, c.category_name, l.id
 ORDER BY l.date_add DESC
-LIMIT 6;';
+LIMIT 7;';
     $result = mysqli_query($link, $query);
     $goods = mysqli_fetch_all($result, MYSQLI_ASSOC);
 

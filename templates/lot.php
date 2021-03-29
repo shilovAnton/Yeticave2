@@ -1,4 +1,3 @@
-<pre><?= var_dump($lot); ?></pre>
 <section class="lot-item container">
     <h2><?= $lot['lot_name']; ?></h2>
     <div class="lot-item__content">
@@ -29,7 +28,7 @@
                     <p class="lot-item__form-item form__item form__item--invalid">
                         <label for="cost">Ваша ставка</label>
                         <input id="cost" type="text" name="cost"
-                               placeholder="<?= format_price($lot['max_rate'] + $lot['rate_step']); ?>">
+                               placeholder="<?= $lot['max_rate'] + $lot['rate_step']; ?>">
                         <span class="form__error">Введите Вашу ставку</span>
                     </p>
                     <button type="submit" class="button">Сделать ставку</button>
@@ -42,7 +41,7 @@
                     <tr class="history__item">
                         <td class="history__name"><?= $rate['user_name']; ?></td>
                         <td class="history__price"><?= format_price($rate['rate']); ?></td>
-                        <td class="history__time"><?= $rate['date_rate']; ?></td>
+                        <td class="history__time"><?= rates_add($rate['date_rate']); ?></td>
                     </tr>
                     <?php endforeach; ?>
                 </table>
