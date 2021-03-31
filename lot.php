@@ -54,6 +54,6 @@ LIMIT 12;';
 
         print($layout);
     } else {
-        print 'Oops, данный лот не найден...';
+        header("Location: http://yeticave2/404.php");
     }
 }

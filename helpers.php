@@ -159,36 +159,47 @@ function format_price($price): string
 
 /**
  * Таймер аукциона, рассчитывает остаток времени до окончания торгов в формате: Часы:Минуты
- * @param string $date_end Дата окончания
- * @return array Остаток часов и минут, и булево true если осталось менее часа
  */
-function get_dt_range($date_end): array
+function get_dt_range($date_end)
 {
-    if (is_date_valid($date_end)) {
-        $date_end_unit = strtotime($date_end);
-        $now = time();
-        if ($date_end_unit > $now) {
-            $interval = $date_end_unit - $now;
-            $hors = intdiv($interval, 3600);
-            $min = intdiv(($interval % 3600), 60);
-            if ($hors < 1) {
-                $timer_finishing = true;
-            } else {
-                $timer_finishing = false;
-            }
-            if ($hors < 10) {
-                $hors = '0' . $hors;
-            }
-            if ($min < 10) {
-                $min = '0' . $min;
-            }
-        } else {
-            $hors = '00';
-            $min = '00';
+//    if (is_date_valid($date_end)) {
+//        $date_end_unit = strtotime($date_end);
+//        $now = time();
+//        if ($date_end_unit > $now) {
+//            $interval = $date_end_unit - $now;
+//            $hors = intdiv($interval, 3600);
+//            $min = intdiv(($interval % 3600), 60);
+//            if ($hors < 1) {
+//                $timer_finishing = true;
+//            } else {
+//                $timer_finishing = false;
+//            }
+//            if ($hors < 10) {
+//                $hors = '0' . $hors;
+//            }
+//            if ($min < 10) {
+//                $min = '0' . $min;
+//            }
+//        } else {
+//            $hors = '00';
+//            $min = '00';
+//            $timer_finishing = true;
+//        }
+//    }
+//    return [$hors.' : '.$min, $timer_finishing];
+    $now = new DateTime('now', new DateTimeZone('Asia/Novosibirsk'));
+    $end_object = new DateTime($date_end, new DateTimeZone('Asia/Novosibirsk'));
+    $interval = $now->diff($end_object);
+    $timer_finishing = false;
+    if ($interval->d < 1) {
+        $end = $interval->format('%H:%I');
+        if ($interval->h < 1) {
             $timer_finishing = true;
         }
+    } else {
+        $end = $interval->format('%D:%H:%I');
     }
-    return [$hors.' : '.$min, $timer_finishing];
+    return [$end, $timer_finishing];
 }
 
 /**

@@ -8,6 +8,6 @@ if ($link === false){
 }
 
 //Запрос на получение категорий
-$query = 'SELECT category_name, character_code FROM categories;';
+$query = 'SELECT id, category_name, character_code FROM categories;';
 $result = mysqli_query($link, $query);
 $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
